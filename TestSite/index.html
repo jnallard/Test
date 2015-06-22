@@ -29,7 +29,7 @@ $('#page1').bind('pagehide', function(e) {
 
 </script>
 <style>
-@media all and (max-width: 35em) {
+@media all and (max-width: 50em) {
 	.my-breakpoint .ui-block-a, 
 	.my-breakpoint .ui-block-b, 
 	.my-breakpoint .ui-block-c,
@@ -40,10 +40,11 @@ $('#page1').bind('pagehide', function(e) {
 	}
 }
 
-@media all and (min-width: 35em) {
+@media all and (min-width: 50em) {
 	.my-breakpoint.ui-grid-b .ui-block-a { width: 33.33%; }
 	.my-breakpoint.ui-grid-b .ui-block-b, 
 	.my-breakpoint.ui-grid-b .ui-block-c { width: 33.33%; }
+	.my-breakpoint.ui-grid-b .ui-block-d { width: 50%; }
 	.my-breakpoint.ui-grid-b .ui-block-a { clear: left; }
 	}
 }
@@ -99,16 +100,38 @@ $('#page1').bind('pagehide', function(e) {
 
 	<p>
 	 </p>
+	<div class="ui-grid-b my-breakpoint">
+	<div class="ui-block-d">
 	<a data-role="button" onclick="newGame()">New Game</a>
+	</div>
+	
+	<div class="ui-block-d">
+	<a data-role="button" href="#preferencePanel">Preferences</a>
+	</div>
+	
+	
+	</div>
+	
 
 </div>
 
 
+<div data-role="panel" id="preferencePanel" data-position="right" data-display="overlay">
+<p>Preferences:</p>
+<form>
+	<label for="forceOdds">Force 2nd and 3rd Sliders to be odd:</label>
+	<select id="forceOdds" name="forceOdds" data-role="slider">
+		<option value="true">True</option>
+		<option value="false">False</option>
+	</select>
+</form>
+</div><!-- /panel -->
 
 <script>
 goal = 55;
 
 gameWon = false;
+forceOdds = true;
 	
 function newGame(){
 	gameWon = false;
@@ -133,7 +156,7 @@ function newGame(){
 
 
 	
-	randomStep = getRandomStep(50, true);
+	randomStep = getRandomStep(50, forceOdds);
 	multiplier = Math.floor(100 / randomStep);
 	inputs[i].step = randomStep;
 	inputs[i].max = randomStep * multiplier;
@@ -141,7 +164,7 @@ function newGame(){
 	inputs[i++].value = 0;
 	$("#slider-fill2").slider('refresh');
 	
-	randomStep = getRandomStep(20, true);
+	randomStep = getRandomStep(20, forceOdds);
 	multiplier = Math.floor(100 / randomStep) * -1;
 	inputs[i].step = randomStep;
 	inputs[i].min = randomStep * multiplier;
@@ -211,12 +234,17 @@ function update(){
 		//alert("You won the game!");
 		gameWon = true;
 	}
+	//document.getElementById("won").innerHTML = $("#forceOdds").value;
 }
 
 $( document ).ready(function() {
 
  
-
+	$('#forceOdds').on("change", function() {
+		forceOdds = $("#forceOdds").val() == 'true';
+	});
+	
+	forceOdds = $("#forceOdds").val() == 'true';
     
 	newGame();
 
