@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Josh's Site</title>
+  <link rel="stylesheet" href="./jquery/demos/css/themes/default/jquery.mobile-1.4.5.min.css">
+<script src="./jquery/jquery.js"></script>
+<script src="./jquery/jquery.mobile-1.4.5.min.js"></script>
+
+  <script>
+$('#page1').on('pagecreate', function() {
+
+    $('a').bind('click', function(e) {
+    var trans = $(this).text() || 'none',
+        rev = !!$('#cb1').attr('checked');
+
+    $.mobile.changePage('#page1', { transition: trans,
+                                    allowSamePageTransition: true,
+                                    reverse: rev } );
+    $('#p1').text( 'last transition: ' + trans + ' - reverse: ' + rev );
+  });
+});
+
+$('#page1').bind('pagehide', function(e) {
+  $('a.ui-btn').removeClass('ui-btn-active');
+  if ( !!$('#cb2').attr('checked') && !$(this).hasClass('ui-btn-active') ) { 
+    $(this).addClass('ui-page-active');
+  }
+});    
+
+</script>
+
+</head>
+<body>
+
+<div role="main" class="ui-content">
+     <!--a data-role="button" href="page2.html">Go to page 2</a-->
+	 <table style="width: 100%">
+	 <tr>
+	  <td>
+	  
+	<div class="ui-corner-all custom-corners ui-resposive">
+	  <div class="ui-bar ui-bar-a">
+		<h3>The Wanted Value</h3>
+	  </div>
+	  <div class="ui-body ui-body-a">
+		<p id="goal">Content</p>
+	  </div>
+	</div>
+	  </td>
+	  
+	
+	  <td><div class="ui-corner-all custom-corners ui-resposive">
+	  <div class="ui-bar ui-bar-a">
+		<h3>The Current Value</h3>
+	  </div>
+	  <div class="ui-body ui-body-a">
+		<p id="score">Content</p>
+	  </div>
+	</div>
+	  </td>
+	  <td>
+	  
+	<div class="ui-corner-all custom-corners ui-resposive" id="wonDiv">
+	  <div class="ui-bar ui-bar-a">
+		<h3>Games Won</h3>
+	  </div>
+	  <div class="ui-body ui-body-a">
+		<p id="won">0</p>
+	  </div>
+	</div>
+	  </td>
+	 </tr>
+	 </table>
+	<p>
+	 </p>
+	<label for="slider-fill">Slider with fill and step of 7:</label>
+	<input name="slider-fill" id="slider-fill1" type="range" min="0" max="98" step="7" value="0" data-highlight="true" onchange="update()">
+
+	<label for="slider-fill">Slider with fill and step of 11:</label>
+	<input name="slider-fill" id="slider-fill2" type="range" min="0" max="99" step="11" value="0" data-highlight="true" onchange="update()">
+
+	<label for="slider-fill">Slider with fill and step of -15:</label>
+	<input name="slider-fill" id="slider-fill3" type="range" min="-90" max="0" step="15" value="0" data-highlight="true" onchange="update()">
+
+	<label for="slider-fill">Slider with fill and step of -33:</label>
+	<input name="slider-fill" id="slider-fill4" type="range" min="-99" max="0" step="33" value="0" data-highlight="true" onchange="update()">
+
+	<p>
+	 </p>
+	<a data-role="button" onclick="newGame()">New Game</a>
+
+</div>
+
+
+
+<script>
+goal = 55;
+
+gameWon = false;
+	
+function newGame(){
+	gameWon = false;
+	negativeMultiplier = -1;
+	if(Math.random() >= 0.5){
+		negativeMultiplier = 1;
+	}
+	goal = (Math.floor(Math.random() * 100) + 1) * negativeMultiplier;
+	
+	inputs = document.getElementsByTagName("input");
+	labels = document.getElementsByTagName("label");
+	
+	i = 0;
+	randomStep = getRandomStep(20, false);
+	multiplier = Math.floor(100 / randomStep);
+	inputs[i].step = randomStep;
+	inputs[i].max = randomStep * multiplier;
+	labels[i].innerHTML = "Step of " + randomStep;
+	inputs[i].value = 0;
+	inputs[i++];
+	$("#slider-fill1").slider('refresh');
+
+
+	
+	randomStep = getRandomStep(50, true);
+	multiplier = Math.floor(100 / randomStep);
+	inputs[i].step = randomStep;
+	inputs[i].max = randomStep * multiplier;
+	labels[i].innerHTML = "Step of " + randomStep;
+	inputs[i++].value = 0;
+	$("#slider-fill2").slider('refresh');
+	
+	randomStep = getRandomStep(20, true);
+	multiplier = Math.floor(100 / randomStep) * -1;
+	inputs[i].step = randomStep;
+	inputs[i].min = randomStep * multiplier;
+	labels[i].innerHTML = "Step of -" + randomStep;
+	inputs[i++].value = 0;
+	$("#slider-fill3").slider('refresh');
+	
+	randomStep = getRandomStep(50, false);
+	multiplier = Math.floor(100 / randomStep) * -1;
+	inputs[i].step = randomStep;
+	inputs[i].min = randomStep * multiplier;
+	labels[i].innerHTML = "Step of -" + randomStep;
+	inputs[i++].value = 0;
+	$("#slider-fill4").slider('refresh');
+	
+	update();
+}
+
+function getRandomStep(max, isForcedOdd){
+	randomStep = Math.floor(Math.random() * max) + 1;
+	while(randomStep < 4 || (isForcedOdd && randomStep % 2 == 0)){
+		randomStep = Math.floor(Math.random() * max) + 1;
+	}
+	return randomStep;
+}
+
+function update(){
+	inputs = document.getElementsByTagName("input");
+	count = 0;
+	for(i = 0; i < inputs.length; i++){
+		if(inputs[i].name != null && inputs[i].name == "slider-fill"){
+			count = count + parseInt(inputs[i].value, 10);
+		}
+	}
+	document.getElementById("score").innerHTML = count;
+	
+	document.getElementById("goal").innerHTML = goal;
+	
+	if(count == goal && !gameWon){
+		document.getElementById("goal").innerHTML = goal + "  <a style='color: green'>Goal Achieved!</a>";
+		document.getElementById("won").innerHTML = parseInt(document.getElementById("won").innerHTML, 10) + 1;
+		//document.getElementById("wonDiv").style.background = "green";
+		//alert("You won the game!");
+		gameWon = true;
+	}
+}
+
+$( document ).ready(function() {
+
+ 
+
+    
+	newGame();
+
+ 
+
+});
+
+
+
+
+</script>
+</body>
+</html>
