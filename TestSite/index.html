@@ -157,6 +157,10 @@ function newGame(){
 	inputs[i++].value = 0;
 	$("#slider-fill4").slider('refresh');
 	
+	$("#slider-fill1").slider('enable');
+	$("#slider-fill2").slider('enable');
+	$("#slider-fill3").slider('enable');
+	$("#slider-fill4").slider('enable');
 	update();
 }
 
@@ -183,6 +187,11 @@ function update(){
 	if(count == goal && !gameWon){
 		document.getElementById("goal").innerHTML = goal + "  <a style='color: green'>Goal Achieved!</a>";
 		document.getElementById("won").innerHTML = parseInt(document.getElementById("won").innerHTML, 10) + 1;
+		
+		$("#slider-fill1").slider('disable');
+		$("#slider-fill2").slider('disable');
+		$("#slider-fill3").slider('disable');
+		$("#slider-fill4").slider('disable');
 		//document.getElementById("wonDiv").style.background = "green";
 		//alert("You won the game!");
 		gameWon = true;
