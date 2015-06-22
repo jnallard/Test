@@ -219,12 +219,12 @@ function getRandomStep(max, isForcedOdd, usedSteps){
 	return randomStep;
 }
 
-var mouseDown = 0;
+var mouseDown = false;
 document.body.onmousedown = function() { 
-  ++mouseDown;
+  mouseDown = true;
 }
 document.body.onmouseup = function() {
-  --mouseDown;
+  mouseDown = false;
   setTimeout(function()
     {
         update();
