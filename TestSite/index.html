@@ -172,6 +172,19 @@ function getRandomStep(max, isForcedOdd){
 	return randomStep;
 }
 
+var mouseDown = 0;
+document.body.onmousedown = function() { 
+  ++mouseDown;
+}
+document.body.onmouseup = function() {
+  --mouseDown;
+  setTimeout(function()
+    {
+        update();
+
+    }, 500);
+}
+
 function update(){
 	inputs = document.getElementsByTagName("input");
 	count = 0;
@@ -184,10 +197,12 @@ function update(){
 	
 	document.getElementById("goal").innerHTML = goal;
 	
-	if(count == goal && !gameWon){
+	if(count == goal && !gameWon && !mouseDown){
 		document.getElementById("goal").innerHTML = goal + "  <a style='color: green'>Goal Achieved!</a>";
 		document.getElementById("won").innerHTML = parseInt(document.getElementById("won").innerHTML, 10) + 1;
 		
+		
+		$("#goal").focus().select();
 		$("#slider-fill1").slider('disable');
 		$("#slider-fill2").slider('disable');
 		$("#slider-fill3").slider('disable');
