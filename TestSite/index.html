@@ -86,18 +86,22 @@ $('#page1').bind('pagehide', function(e) {
 	</div>
 	<p>
 	 </p>
+	 <div id="slider1">
 	<label for="slider-fill">Slider with fill and step of 7:</label>
 	<input name="slider-fill" id="slider-fill1" type="range" min="0" max="98" step="7" value="0" data-highlight="true" onchange="update()">
-
+	</div>
+	 <div id="slider2">
 	<label for="slider-fill">Slider with fill and step of 11:</label>
 	<input name="slider-fill" id="slider-fill2" type="range" min="0" max="99" step="11" value="0" data-highlight="true" onchange="update()">
-
+</div>
+	 <div id="slider3">
 	<label for="slider-fill">Slider with fill and step of -15:</label>
 	<input name="slider-fill" id="slider-fill3" type="range" min="-90" max="0" step="15" value="0" data-highlight="true" onchange="update()">
-
+</div>
+	 <div id="slider4">
 	<label for="slider-fill">Slider with fill and step of -33:</label>
 	<input name="slider-fill" id="slider-fill4" type="range" min="-99" max="0" step="33" value="0" data-highlight="true" onchange="update()">
-
+</div>
 	<p>
 	 </p>
 	<div class="ui-grid-b my-breakpoint">
@@ -117,10 +121,25 @@ $('#page1').bind('pagehide', function(e) {
 
 
 <div data-role="panel" id="preferencePanel" data-position="right" data-display="overlay">
-<p>Preferences:</p>
+<h1>Preferences:</h1>
+<h3>Warning: Changing these options will restart the game!</h3>
+<form>
+	<label for="playWith4Sliders">Play with all 4 sliders:</label>
+	<select id="playWith4Sliders" name="playWith4Sliders" data-role="slider">
+		<option value="true">True</option>
+		<option value="false">False</option>
+	</select>
+</form>
 <form>
 	<label for="forceOdds">Force 2nd and 3rd Sliders to be odd:</label>
 	<select id="forceOdds" name="forceOdds" data-role="slider">
+		<option value="true">True</option>
+		<option value="false">False</option>
+	</select>
+</form>
+<form>
+	<label for="forceDifferent">Force different absolute values:</label>
+	<select id="forceDifferent" name="forceDifferent" data-role="slider">
 		<option value="true">True</option>
 		<option value="false">False</option>
 	</select>
@@ -132,6 +151,7 @@ goal = 55;
 
 gameWon = false;
 forceOdds = true;
+forceDifferent = true;
 	
 function newGame(){
 	gameWon = false;
@@ -143,9 +163,12 @@ function newGame(){
 	
 	inputs = document.getElementsByTagName("input");
 	labels = document.getElementsByTagName("label");
+	maxSmall = 20;
+	maxLarge = 33;
 	
+	var usedSteps = [];
 	i = 0;
-	randomStep = getRandomStep(20, false);
+	randomStep = getRandomStep(maxSmall, false, usedSteps);
 	multiplier = Math.floor(100 / randomStep);
 	inputs[i].step = randomStep;
 	inputs[i].max = randomStep * multiplier;
@@ -156,7 +179,7 @@ function newGame(){
 
 
 	
-	randomStep = getRandomStep(50, forceOdds);
+	randomStep = getRandomStep(maxLarge, forceOdds, usedSteps);
 	multiplier = Math.floor(100 / randomStep);
 	inputs[i].step = randomStep;
 	inputs[i].max = randomStep * multiplier;
@@ -164,7 +187,7 @@ function newGame(){
 	inputs[i++].value = 0;
 	$("#slider-fill2").slider('refresh');
 	
-	randomStep = getRandomStep(20, forceOdds);
+	randomStep = getRandomStep(maxSmall, forceOdds, usedSteps);
 	multiplier = Math.floor(100 / randomStep) * -1;
 	inputs[i].step = randomStep;
 	inputs[i].min = randomStep * multiplier;
@@ -172,7 +195,7 @@ function newGame(){
 	inputs[i++].value = 0;
 	$("#slider-fill3").slider('refresh');
 	
-	randomStep = getRandomStep(50, false);
+	randomStep = getRandomStep(maxLarge, false, usedSteps);
 	multiplier = Math.floor(100 / randomStep) * -1;
 	inputs[i].step = randomStep;
 	inputs[i].min = randomStep * multiplier;
@@ -187,11 +210,12 @@ function newGame(){
 	update();
 }
 
-function getRandomStep(max, isForcedOdd){
+function getRandomStep(max, isForcedOdd, usedSteps){
 	randomStep = Math.floor(Math.random() * max) + 1;
-	while(randomStep < 4 || (isForcedOdd && randomStep % 2 == 0)){
+	while(randomStep < 4 || (isForcedOdd && randomStep % 2 == 0) || (forceDifferent && (usedSteps.indexOf(randomStep) > -1) || usedSteps.indexOf(randomStep * -1) > -1)){
 		randomStep = Math.floor(Math.random() * max) + 1;
 	}
+	usedSteps.push(randomStep);
 	return randomStep;
 }
 
@@ -242,10 +266,32 @@ $( document ).ready(function() {
  
 	$('#forceOdds').on("change", function() {
 		forceOdds = $("#forceOdds").val() == 'true';
+		newGame();
 	});
 	
 	forceOdds = $("#forceOdds").val() == 'true';
+	
+	$('#playWith4Sliders').on("change", function() {
+		if($("#playWith4Sliders").val() == 'false'){
+			$("#slider2").hide();
+			$("#slider3").hide();
+			$("#forceOdds").slider('disable');
+		}
+		else{
+			$("#slider2").show();
+			$("#slider3").show();
+			$("#forceOdds").slider('enable')
+		}
+		newGame();
+	});
     
+	$('#forceDifferent').on("change", function() {
+		forceDifferent = $("#forceDifferent").val() == 'true';
+		newGame();
+	});
+	
+	forceDifferent = $("#forceDifferent").val() == 'true';
+	
 	newGame();
 
  
