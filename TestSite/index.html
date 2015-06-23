@@ -29,10 +29,24 @@ $('#page1').bind('pagehide', function(e) {
 
 </script>
 <style>
-@media all and (max-width: 50em) {
-	.my-breakpoint .ui-block-a, 
-	.my-breakpoint .ui-block-b, 
-	.my-breakpoint .ui-block-c,
+@media all and (max-width: 30em) {
+	.my-breakpoint .ui-block-a { 
+		width: 50%; 
+		float:left; 
+	}
+	
+	.my-breakpoint .ui-block-a2 { 
+		width: 50%; 
+		float:left; 
+	}
+	.my-breakpoint .ui-block-b { 
+		width: 100%; 
+		float:left; 
+	}
+	.my-breakpoint .ui-block-c { 
+		width: 50%; 
+		float:left; 
+	}
 	.my-breakpoint .ui-block-d,
 	.my-breakpoint .ui-block-e { 
 		width: 100%; 
@@ -40,9 +54,10 @@ $('#page1').bind('pagehide', function(e) {
 	}
 }
 
-@media all and (min-width: 50em) {
-	.my-breakpoint.ui-grid-b .ui-block-a { width: 33.33%; }
-	.my-breakpoint.ui-grid-b .ui-block-b, 
+@media all and (min-width: 30em) {
+	.my-breakpoint.ui-grid-b .ui-block-a { width: 50%; float: left;}
+	.my-breakpoint.ui-grid-b .ui-block-a2 { width: 50%; float: left;}
+	.my-breakpoint.ui-grid-b .ui-block-b { width: 33.33%; } 
 	.my-breakpoint.ui-grid-b .ui-block-c { width: 33.33%; }
 	.my-breakpoint.ui-grid-b .ui-block-d { width: 50%; }
 	.my-breakpoint.ui-grid-b .ui-block-a { clear: left; }
@@ -57,34 +72,54 @@ $('#page1').bind('pagehide', function(e) {
      <!--a data-role="button" href="page2.html">Go to page 2</a-->
 	 <div class="ui-grid-b my-breakpoint">
 	  
-	<div class="ui-corner-all custom-corners ui-block-a">
+	  <div class="ui-corner-all custom-corners ui-block-b" id="wonDiv">
 	  <div class="ui-bar ui-bar-a">
-		<h3>The Wanted Value</h3>
-	  </div>
-	  <div class="ui-body ui-body-a">
-		<p id="goal">Content</p>
-	  </div>
-	</div>
-	 <div class="ui-corner-all custom-corners ui-block-b">
-	  <div class="ui-bar ui-bar-a">
-		<h3>The Current Value</h3>
-	  </div>
-	  <div class="ui-body ui-body-a">
-		<p id="score">Content</p>
-	  </div>
-	</div>
-	  
-	<div class="ui-corner-all custom-corners ui-block-c" id="wonDiv">
-	  <div class="ui-bar ui-bar-a">
-		<h3>Games Won</h3>
+		<h3>Games Won <br /> (in a row)</h3>
 	  </div>
 	  <div class="ui-body ui-body-a">
 		<p id="won">0</p>
 	  </div>
 	</div>
 	
+	<div class="ui-corner-all custom-corners ui-block-c" id="wonDiv">
+	  <div class="ui-bar ui-bar-a">
+		<h3>Game <br /> Timer</h3>
+	  </div>
+	  <div class="ui-body ui-body-a">
+		<p id="timer">0</p>
+	  </div>
 	</div>
-	<p>
+	
+	<div class="ui-corner-all custom-corners ui-block-c" id="wonDiv">
+	  <div class="ui-bar ui-bar-a">
+		<h3>Game <br />Score</h3>
+	  </div>
+	  <div class="ui-body ui-body-a">
+		<p id="score">0</p>
+	  </div>
+	</div>
+	
+	<div class="ui-corner-all custom-corners ui-block-a">
+	  <div class="ui-bar ui-bar-a">
+		<h3>Wanted <br /> Value</h3>
+	  </div>
+	  <div class="ui-body ui-body-a">
+		<p id="goal">Content</p>
+	  </div>
+	</div>
+	 <div class="ui-corner-all custom-corners ui-block-a2">
+	  <div class="ui-bar ui-bar-a">
+		<h3>Current <br /> Value</h3>
+	  </div>
+	  <div class="ui-body ui-body-a">
+		<p id="currentVal">Content</p>
+	  </div>
+	</div>
+	  
+	
+	
+	</div>
+	<p id="displaySuccess">
 	 </p>
 	 <div id="slider1">
 	<label for="slider-fill">Slider with fill and step of 7:</label>
@@ -144,17 +179,37 @@ $('#page1').bind('pagehide', function(e) {
 		<option value="false">False</option>
 	</select>
 </form>
+<form>
+	<label for="selectTimer">Time Limit:</label>
+	<select id="selectTimer" name="selectTimer">
+		<option value="1000|0.25">1000 (Penalty x 0.25)</option>
+		<option value="500|1">500 (No Bonus)</option>
+		<option value="100|10">100 (Bonus x 10)</option>
+		<option value="50|50">50 (Bonus x 50)</option>
+	</select>
+</form>
 </div><!-- /panel -->
 
 <script>
 goal = 55;
+timerCount = 0;
+startingTimer = 100;
+score = 0;
+gamesWon = 0;
+scoreMultiplier = 1;
 
 gameWon = false;
 forceOdds = true;
 forceDifferent = true;
 	
 function newGame(){
+	if(gameWon == false){
+		gamesWon = 0;
+		score = 0;
+	}
 	gameWon = false;
+	
+	document.getElementById("displaySuccess").innerHTML = "  <a style='color: green' visibility='false'> </a>";
 	negativeMultiplier = -1;
 	if(Math.random() >= 0.5){
 		negativeMultiplier = 1;
@@ -208,6 +263,7 @@ function newGame(){
 	$("#slider-fill3").slider('enable');
 	$("#slider-fill4").slider('enable');
 	update();
+	timerCount = startingTimer;
 }
 
 function getRandomStep(max, isForcedOdd, usedSteps){
@@ -225,11 +281,7 @@ document.body.onmousedown = function() {
 }
 document.body.onmouseup = function() {
   mouseDown = false;
-  setTimeout(function()
-    {
-        update();
-
-    }, 500);
+  setTimeout(function(){update();}, 500);
 }
 
 function update(){
@@ -240,13 +292,15 @@ function update(){
 			count = count + parseInt(inputs[i].value, 10);
 		}
 	}
-	document.getElementById("score").innerHTML = count;
+	document.getElementById("currentVal").innerHTML = count;
 	
 	document.getElementById("goal").innerHTML = goal;
 	
 	if(count == goal && !gameWon && !mouseDown){
-		document.getElementById("goal").innerHTML = goal + "  <a style='color: green'>Goal Achieved!</a>";
-		document.getElementById("won").innerHTML = parseInt(document.getElementById("won").innerHTML, 10) + 1;
+		document.getElementById("goal").innerHTML = goal;
+		document.getElementById("displaySuccess").innerHTML = "  <a style='color: green'>Goal Achieved!</a>";
+		gamesWon++;
+		score = score + (timerCount * scoreMultiplier);
 		
 		
 		$("#goal").focus().select();
@@ -258,6 +312,10 @@ function update(){
 		//alert("You won the game!");
 		gameWon = true;
 	}
+	
+	document.getElementById("won").innerHTML = gamesWon;
+	
+	document.getElementById("score").innerHTML = score;
 	//document.getElementById("won").innerHTML = $("#forceOdds").value;
 }
 
@@ -292,9 +350,32 @@ $( document ).ready(function() {
 	
 	forceDifferent = $("#forceDifferent").val() == 'true';
 	
+	$('#selectTimer').on("change", function() {
+		timerSelectValue = $("#selectTimer").val().split('|');
+		startingTimer = parseFloat(timerSelectValue[0]);
+		scoreMultiplier = parseFloat(timerSelectValue[1]);
+		newGame();
+	});
+	
+	
+	timerSelectValue = $("#selectTimer").val().split('|');
+	startingTimer = parseFloat(timerSelectValue[0]);
+	scoreMultiplier = parseFloat(timerSelectValue[1]);
+	
 	newGame();
 
- 
+	setInterval(timerDown, 1000);
+
+	timerCount = startingTimer;
+	function timerDown() {
+		if(!gameWon){
+			timerCount--;
+		}
+		if(timerCount < 0){
+			timerCount = 0;
+		}
+		timer.innerHTML = timerCount;
+	}
 
 });
 
