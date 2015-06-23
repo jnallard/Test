@@ -157,7 +157,7 @@ $('#page1').bind('pagehide', function(e) {
 
 <div data-role="panel" id="preferencePanel" data-position="right" data-display="overlay">
 <h1>Preferences:</h1>
-<h3>Warning: Changing these options will restart the game!</h3>
+<h3>Warning: Changing these options will restart the game and your score!</h3>
 <form>
 	<label for="playWith4Sliders">Play with all 4 sliders:</label>
 	<select id="playWith4Sliders" name="playWith4Sliders" data-role="slider">
@@ -182,10 +182,10 @@ $('#page1').bind('pagehide', function(e) {
 <form>
 	<label for="selectTimer">Time Limit:</label>
 	<select id="selectTimer" name="selectTimer">
-		<option value="1000|0.25">1000 (Penalty x 0.25)</option>
-		<option value="500|1">500 (No Bonus)</option>
-		<option value="100|10">100 (Bonus x 10)</option>
-		<option value="50|50">50 (Bonus x 50)</option>
+		<option value="1000|0.25">1000 (Score = TimeLeft x 0.25)</option>
+		<option value="500|1">500 (Score = TimeLeft)</option>
+		<option value="100|10">100 (Score = TimeLeft x 10)</option>
+		<option value="50|50">50 (Score = TimeLeft x 50)</option>
 	</select>
 </form>
 </div><!-- /panel -->
@@ -323,6 +323,7 @@ $( document ).ready(function() {
 
  
 	$('#forceOdds').on("change", function() {
+		gameWon = false;
 		forceOdds = $("#forceOdds").val() == 'true';
 		newGame();
 	});
@@ -330,6 +331,7 @@ $( document ).ready(function() {
 	forceOdds = $("#forceOdds").val() == 'true';
 	
 	$('#playWith4Sliders').on("change", function() {
+		gameWon = false;
 		if($("#playWith4Sliders").val() == 'false'){
 			$("#slider2").hide();
 			$("#slider3").hide();
@@ -344,6 +346,7 @@ $( document ).ready(function() {
 	});
     
 	$('#forceDifferent').on("change", function() {
+		gameWon = false;
 		forceDifferent = $("#forceDifferent").val() == 'true';
 		newGame();
 	});
@@ -351,6 +354,7 @@ $( document ).ready(function() {
 	forceDifferent = $("#forceDifferent").val() == 'true';
 	
 	$('#selectTimer').on("change", function() {
+		gameWon = false;
 		timerSelectValue = $("#selectTimer").val().split('|');
 		startingTimer = parseFloat(timerSelectValue[0]);
 		scoreMultiplier = parseFloat(timerSelectValue[1]);
@@ -374,7 +378,13 @@ $( document ).ready(function() {
 		if(timerCount < 0){
 			timerCount = 0;
 		}
-		timer.innerHTML = timerCount;
+		
+		if(timerCount < startingTimer / 5){
+			timer.innerHTML = "  <a style='color: red'>" + timerCount + "</a>";
+		}
+		else{
+			timer.innerHTML = timerCount;
+		}
 	}
 
 });
