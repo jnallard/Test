@@ -11,43 +11,55 @@
 $(function(){
   $("#header").load("Elements/navbar.html"); 
 });
+ 
+$(function(){
+  $("#footer").load("Elements/footer.html"); 
+});
 </script>
 </head>
 <body>
 <div id="header">
 </div>
 <div class="container">
-  <div class="jumbotron">
+  <div style="background-color: #99EBFF; text-align: center;" class="jumbotron">
 	<h1>J<small>oshua</small> N<small>icholas</small> Allard</h1>
 	<p>A Computer Science Student at <abbr title="Worcester Polytechnic Institute">WPI</abbr>!</p> 
+  </div><div class="row">
+	<div class="col-sm-12">
+	  <h3>Hello!</h3>
+	  <p>Welcome to Joshua Nicholas Allard's site!</p>
+	  <p>This site is dedicated to supplying all of the information you need to know about Josh.</p>
+	</div>
   </div>
   <div class="row">
-	<div class="col-sm-4">
+	<div class="col-sm-6 col-lg-3">
 	  <h3>About Me</h3>
 	  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
 	  <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
 	  <a href="aboutme.html">Read More...</a>
 	</div>
-	<div class="col-sm-4">
+	<div class="col-sm-6 col-lg-3">
 	  <h3>My Classes</h3>
 	  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
 	  <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
-	  <a href="myclasses.html">Read More...</a>
+	  <a href="classes.html">Read More...</a>
 	</div>
-	<div class="col-sm-4">
+	<div class="col-sm-6 col-lg-3">
 	  <h3>My Projects</h3>        
 	  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
 	  <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
-	  <a href="myprojects.html">Read More...</a>
+	  <a href="projects.html">Read More...</a>
 	</div>
-	<div class="col-sm-4">
+	<div class="col-sm-6 col-lg-3">
 	  <h3>My Work Experience</h3>        
 	  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
 	  <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
-	  <a href="workexperience.html">Read More...</a>
+	  <a href="experience.html">Read More...</a>
 	</div>
   </div>
 </div>
 
+<div id="footer">
+</div>
 </body>
 </html>

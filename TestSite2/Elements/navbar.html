@@ -13,19 +13,44 @@
         <li><a href="experience.html">Work Experience</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="files/resume.pdf" download><span class="glyphicon glyphicon-download"> </span> Download Resume</a></li>
+        <li><a href="Files/resume.pdf" download><span class="glyphicon glyphicon-download"> </span> Download Resume</a></li>
+        <li><a href="#contactPopup" data-toggle="modal" data-target="#contactPopup"><span class="glyphicon glyphicon-envelope"> </span> Contact Me</a></li>
       </ul>
     </div>
   </div>
 </nav>
 
+<!-- Modal -->
+<div id="contactPopup" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Contact Joshua Allard</h4>
+      </div>
+      <div class="modal-body">
+        <p>You can contact me at the following email address: <br/> 
+          <a href="mailto:JNAllard@test.com?Subject=Contact%20%JNAllard">JNAllard@test.com</a>
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 <script>
   var children = $("#menu-options").children();
   for( i = 0; i < children.length; i++){
-	var AElement = children.get(i).getElementsByTagName("a")[0];
-	if(AElement.innerHTML == document.title){
-		children.get(i).setAttribute("class", "active");
-	}
+  	var AElement = children.get(i).getElementsByTagName("a")[0];
+
+  	if(AElement.innerHTML == document.title){
+  		children.get(i).setAttribute("class", "active");
+  	}
   }
 
 </script>
