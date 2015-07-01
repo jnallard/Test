@@ -11,15 +11,19 @@
 $(function(){
   $("#header").load("Elements/navbar.html"); 
 });
+ 
+$(function(){
+  $("#footer").load("Elements/footer.html"); 
+});
 </script>
 </head>
 <body>
 <div id="header">
 </div>
 <div class="container">
-  <div class="jumbotron">
-	<h1>My First Bootstrap Page</h1>
-	<p>Resize this responsive page to see the effect!</p> 
+  <div style="background-color: #99EBFF; text-align: center;"  class="jumbotron">
+	<h1>About Me</h1>
+	<p>A quick introuction to Joshua Allard!</p> 
   </div>
   <div class="row">
 	<div class="col-sm-4">
@@ -40,5 +44,7 @@ $(function(){
   </div>
 </div>
 
+<div id="footer">
+</div>
 </body>
 </html>
